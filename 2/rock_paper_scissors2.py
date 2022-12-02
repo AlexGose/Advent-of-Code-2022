@@ -12,30 +12,26 @@ def parse_data(filename):
     return strategy
 
 
-def lose(opponent_shape):
+def lose_shape(opponent_shape):
     if opponent_shape == 'R':
         return 'S'
-    elif opponent_shape == 'P':
+    if opponent_shape == 'P':
         return 'R'
     elif opponent_shape == 'S':
         return 'P'
-    else:
-        raise ValueError('Invalid opponent shape')
 
 
-def draw(opponent_shape):
+def draw_shape(opponent_shape):
     return opponent_shape
 
 
-def win(opponent_shape):
+def win_shape(opponent_shape):
     if opponent_shape == 'R':
         return 'P'
     elif opponent_shape == 'P':
         return 'S'
     elif opponent_shape == 'S':
         return 'R'
-    else:
-        raise ValueError('Invalid opponent shape')
 
 
 def decode(encoded_round):
@@ -48,43 +44,51 @@ def decode(encoded_round):
         decoded_round[0]  = 'S'
 
     if encoded_round[1] == 'X':
-        decoded_round[1] = lose(decoded_round[0])
+        decoded_round[1] = lose_shape(decoded_round[0])
     elif encoded_round[1] == 'Y':
-        decoded_round[1] = draw(decoded_round[0])
+        decoded_round[1] = draw_shape(decoded_round[0])
     elif encoded_round[1] == 'Z':
-        decoded_round[1] = win(decoded_round[0])
+        decoded_round[1] = win_shape(decoded_round[0])
 
     return decoded_round
 
 
-def get_points(decoded_round):
-    points = 0
-    if decoded_round[1] == 'R':
-        points += 1
-        if decoded_round[0]=='R':
-            points += 3
-        elif decoded_round[0]=='S':
-            points += 6
-    elif decoded_round[1] == 'P':
-        points += 2
-        if decoded_round[0] == 'P':
-            points += 3
-        elif decoded_round[0] == 'R':
-            points += 6
-    elif decoded_round[1] == 'S':
-        points += 3
-        if decoded_round[0] == 'S':
-            points += 3
-        elif decoded_round[0] == 'P':
-            points += 6
-    return points
+class Round():
+    def __init__(self, shapes):
+        self.shapes = ' '.join(shapes)
+
+    def your_shape_points(self):
+        if self.your_shape() == 'R':
+            return 1
+        elif self.your_shape() == 'P':
+            return 2
+        elif self.your_shape() == 'S':
+            return 3
+
+    def your_shape(self):
+        return self.shapes[-1]
+
+    def your_win_loss_points(self):
+        if (self.shapes == 'S R') | (self.shapes == 'R P') \
+                | (self.shapes ==  'P S'):
+            return 6
+        elif (self.shapes == 'R R') | (self.shapes == 'P P') \
+                | (self.shapes == 'S S'):
+            return 3
+        else:
+            return 0
+
+    def your_total_points(self):
+        return self.your_shape_points() + self.your_win_loss_points()
 
 
 if __name__=='__main__':
     strategy_guide = parse_data('input')
 
     total_score = 0
-    for decoded_round in strategy_guide:
-        total_score += get_points(decoded_round)
+    for decoded_string in strategy_guide:
+        r = Round(decoded_string)
+        # print(f'r.your_win_loss_points()={r.your_win_loss_points()}')
+        total_score += r.your_total_points()
 
     print(f"total score is {total_score}")
