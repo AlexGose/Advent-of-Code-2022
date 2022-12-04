@@ -31,12 +31,30 @@ class Range():
             return True
         return False
 
+    def no_overlap_with(self, other) -> bool:
+        if ( self.upper_limit < other.lower_limit ) | \
+                ( self.lower_limit > other.upper_limit ):
+            return True
+        return False
+
+    def overlaps(self, other) -> bool:
+        return not self.no_overlap_with(other)
+
 
 if __name__ == '__main__':
     lines = parse_data('input')
+    
     contained_pair_count = 0
     for ranges in lines:
         if ranges[0].contains(ranges[1]) | ranges[1].contains(ranges[0]):
             contained_pair_count += 1
     print('Part 1')
     print(f'Total pairs with containment: {contained_pair_count}')
+
+    overlap_count = 0
+    for ranges in lines:
+        if ranges[0].overlaps(ranges[1]):
+            overlap_count += 1
+    print('Part 2')
+    print(f'Total pairs with overlap: {overlap_count}')
+    
