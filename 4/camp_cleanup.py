@@ -26,13 +26,13 @@ class Range():
         return Range(int(lower_text), int(upper_text))
 
     def contains(self, other) -> bool:
-        if ( other.lower_limit >= self.lower_limit ) & \
+        if ( other.lower_limit >= self.lower_limit ) and \
                 ( other.upper_limit <= self.upper_limit ):
             return True
         return False
 
     def no_overlap_with(self, other) -> bool:
-        if ( self.upper_limit < other.lower_limit ) | \
+        if ( self.upper_limit < other.lower_limit ) or \
                 ( self.lower_limit > other.upper_limit ):
             return True
         return False
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     
     contained_pair_count = 0
     for ranges in lines:
-        if ranges[0].contains(ranges[1]) | ranges[1].contains(ranges[0]):
+        if ranges[0].contains(ranges[1]) or ranges[1].contains(ranges[0]):
             contained_pair_count += 1
     print('Part 1')
     print(f'Total pairs with containment: {contained_pair_count}')
