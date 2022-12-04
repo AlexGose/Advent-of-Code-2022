@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env python3
 
 # Advent of Code 2022, Day 4: Camp Cleanup
 
