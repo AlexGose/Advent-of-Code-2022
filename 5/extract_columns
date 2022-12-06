@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# extract columns of data from the input data file
+# print the output in the form of a Python list of lists
+# with each list holding the values of each column in bottom up order
+
+filename="input" # input data file
+start=2 # number of characters for the start column
+increment=4 # number of characters between columns
+num_rows=8 # number of lines of input text file
+
+num_columns="$(awk 'NR==1{ print length }' "${filename}")"
+echo -n "["
+for (( column=start; column<=num_columns; column+=increment )); do
+  awk_string="BEGIN{ print \"]\" }"
+  awk_string+="(NR<=${num_rows}){ print \"\\\"\"\$${column}\"\\\",\" }"
+  awk_string+="END{ print \"[\" }"
+  awk -F '' "${awk_string}" "${filename}" | tac | tr -d '\n' | sed 's/,]/],/'
+done
+echo -e "\b]"
