@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo test:
+cat test | python3 day6.py
+echo
+echo input:
+cat input | python3 day6.py

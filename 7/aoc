@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Advent of Code 2022, Day 7
+
+cat test | python3 day7.py
+cat input | python3 day7.py
