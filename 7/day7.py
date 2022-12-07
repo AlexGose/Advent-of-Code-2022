@@ -50,6 +50,23 @@ class Directory():
                 output += obj.get_total_size(max_size)
         return output
 
+    def get_min_size(self, min_size):
+        """
+        Return smallest sub-directory size greater than min_size
+        Return -1 if no sub-directory above min_size is found
+        """
+        if self.size < min_size:
+            return -1
+        output = self.size
+        for obj in self.contents.values():
+            if isinstance(obj, Directory):
+                next_size = obj.get_min_size(min_size)
+                if next_size == -1:
+                    continue
+                else:
+                    if next_size < output:
+                        output = next_size
+        return output
 
 
 @dataclass(frozen=True)
@@ -81,5 +98,13 @@ if __name__ == '__main__':
 
     total_sizes_under_100k = 0
     
+    print()
     print('Part 1:')
     print(f'Sum of sizes below 100k: {root.get_total_size(100000)}')
+    print()
+    print('Part 2:')
+    print(f'Free space = {70000000 - root.size}')
+    free_space = 70000000 - root.size
+    min_space_to_free = 30000000 - free_space
+    print(f'Min space to free up = {min_space_to_free}')
+    print(f'Min directory size to delete = {root.get_min_size(min_space_to_free)}')
