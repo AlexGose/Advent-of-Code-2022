@@ -6,15 +6,8 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    p1=0
-    p2=""
-
-    tree_grid = []
-    for line in open(0):
-        line = line.rstrip('\n')
-        tree_grid.append([-1]*len(line))
-        for i in range(len(tree_grid[-1])):
-            tree_grid[-1][i] = int(line[i])
+    tree_grid = [[int(height) for height in line] for 
+            line in open(0).read().strip('\n').split('\n')]
     tree_grid = np.array(tree_grid)
     #print(tree_grid)
 
@@ -45,6 +38,7 @@ if __name__ == '__main__':
         for row in range(num_rows):
             max_right[row, col] = max([max_right[row, col+1], tree_grid[row, col+1]])
 
+    p1 = 0
     for row in range(num_rows):
         for col in range(num_cols):
             if ( tree_grid[row,col] > max_top[row,col] ) \
@@ -55,6 +49,38 @@ if __name__ == '__main__':
 
     print('Part1:')
     print(f'p1={p1}')
+
+    p2 = 0
+    for row in range(num_rows):
+        for col in range(num_cols):
+            scenic_score = 1
+            tree_count = 0
+            height = tree_grid[row, col]
+            for r in range(row+1,num_rows):
+                tree_count += 1
+                if height <= tree_grid[r, col]:
+                    break
+            scenic_score *= tree_count
+            tree_count = 0
+            for r in range(row-1,-1,-1):
+                tree_count += 1
+                if height <= tree_grid[r, col]:
+                    break
+            scenic_score *= tree_count
+            tree_count = 0
+            for c in range(col+1, num_cols):
+                tree_count += 1
+                if height <= tree_grid[row, c]:
+                    break
+            scenic_score *= tree_count
+            tree_count = 0
+            for c in range(col-1, -1, -1):
+                tree_count += 1
+                if height <= tree_grid[row, c]:
+                    break
+            scenic_score *= tree_count
+            if scenic_score > p2:
+                p2 = scenic_score
 
     print('Part2:')
     print(f'p2={p2}')
