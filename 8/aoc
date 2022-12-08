@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Advent of Code 2022, Day 8
+
+echo test:
+cat test | python3 day8.py
+echo
+echo input:
+cat input | python3 day8.py
