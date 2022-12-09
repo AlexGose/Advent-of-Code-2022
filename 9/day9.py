@@ -68,7 +68,16 @@ if __name__ == '__main__':
     print('Part 1:')
     print(f'p1={len(visited_coordinates)}')
 
-    p2 = 0
+    knots = [Position() for i in range(10)]
+    visited_long_tail = set()
+    visited_long_tail.add(Coordinates())
+    for move in moves:
+        knots[0].move(move)
+        for i in range(1,10):
+            knots[i].move_to_head(knots[i-1])
+            if i==9:
+                visited_long_tail.add(knots[i].get_coordinates())
+
     print()
     print('Part 2:')
-    print(f'p2={p2}')
+    print(f'p2={len(visited_long_tail)}')

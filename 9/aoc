@@ -5,5 +5,8 @@
 echo test:
 cat test | python3 day9.py
 echo
+echo test2:
+cat test2 | python3 day9.py
+echo
 echo input:
 cat input | python3 day9.py
