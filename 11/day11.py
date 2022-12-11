@@ -42,6 +42,18 @@ class Monkey():
     def receive_item(self, worry_level):
         self.items.appendleft(worry_level)
 
+    def get_monkey_business(monkeys):
+        largest = -1
+        second_largest = -1
+        for monkey in monkeys:
+            number_inspected = monkey.number_inspected
+            if number_inspected > largest:
+                second_largest = largest
+                largest = number_inspected
+            elif number_inspected > second_largest:
+                second_largest = number_inspected
+        return largest*second_largest
+
 
 if __name__ == '__main__':
     monkeys_text = open(0).read().split('\n\n')
@@ -61,18 +73,8 @@ if __name__ == '__main__':
                 else:
                     monkeys[monkey.monkey_for_false].receive_item(worry_level)
 
-    largest = -1
-    second_largest = -1
-    for monkey in monkeys:
-        number_inspected = monkey.number_inspected
-        if number_inspected > largest:
-            second_largest = largest
-            largest = number_inspected
-        elif number_inspected > second_largest:
-            second_largest = number_inspected
-
     print('Part 1:')
-    print(f'p1={largest*second_largest}')
+    print(f'p1={Monkey.get_monkey_business(monkeys)}')
 
     start_time = datetime.datetime.now()
     divisor_product = 1
@@ -99,21 +101,12 @@ if __name__ == '__main__':
         #    print(f'Number of passes in last round: {number_of_passes}')
         #    #print(f'First monkey: {monkeys2[0]}')
         #    #print(f'first monkey item 0: {monkeys2[0].items[0]}')
+
         if (round == 0) or (round == 19) or (((round+1) % 1000) == 0):
             print(f'== After round {round + 1} ==')
             for monkey in monkeys2:
                 print(f'monkey {monkey.index} inspected items {monkey.number_inspected} times.')
 
-    largest = -1
-    second_largest = -1
-    for monkey in monkeys2:
-        number_inspected = monkey.number_inspected
-        if number_inspected > largest:
-            second_largest = largest
-            largest = number_inspected
-        elif number_inspected > second_largest:
-            second_largest = number_inspected
-
     print('Part 2:')
-    print(f'p2={largest*second_largest}')
+    print(f'p2={Monkey.get_monkey_business(monkeys2)}')
 
