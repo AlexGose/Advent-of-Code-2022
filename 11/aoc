@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cat test | python3 day11.py
+cat input | python3 day11.py
