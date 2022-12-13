@@ -4,6 +4,7 @@
 
 import datetime
 import numpy as np
+import networkx as nx
 
 
 def node_index(row: int, col: int, num_cols: int):
@@ -12,9 +13,10 @@ def node_index(row: int, col: int, num_cols: int):
 
 def min_distance(start_index: int, end_index: int, distances, 
         show_path=False):
+    distances = np.array(distances)
     unvisited_nodes = set(range(len(distances)))
-    d_star = [999 for i in range(len(distances))]
-    prev_node = [999 for i in range(len(distances))]
+    d_star = np.array([999 for i in range(len(distances))])
+    prev_node = np.array([999 for i in range(len(distances))])
     d_star[start_index] = 0
 
     while len(unvisited_nodes) > 0:
@@ -41,7 +43,7 @@ def min_distance(start_index: int, end_index: int, distances,
             print(f'<-{prev_node[current]}',end='')
             current = prev_node[current]
         print()
-    return d_star[end_index]
+    return d_star[end_index], d_star
 
 
 
@@ -55,10 +57,14 @@ if __name__ == '__main__':
     for row, line in enumerate(lines):
         for col, letter in enumerate(line):
             if letter == 'S':
+                start_row = row
+                start_col = col
                 start_index = node_index(row, col, num_cols)
                 lines[row] = lines[row].replace('S','a')
                 #print(f'after lines={lines[row]}')
             elif letter == 'E':
+                end_row = row
+                end_col = col
                 end_index = node_index(row, col, num_cols)
                 lines[row] = lines[row].replace('E','z')
 
@@ -126,19 +132,16 @@ if __name__ == '__main__':
     
     print('Part 1:')
     print(f"p1={min_distance(start_index, end_index, distances)}")
-
-    # Floyd-Warshall algorithm -- takes more than 13 minutes to run
-    t0 = datetime.datetime.now()
-    distances = np.array(distances)
-    for k in range(len(distances)):
-        #print(f'Start k={k} at time {(datetime.datetime.now()-t0).seconds}')
-        dk = distances[:,k].reshape((-1,1)) + distances[k,:].reshape((1,-1))
-        distances[distances > dk] = dk[distances > dk]
-        shortest_trail = 999
+    
+    # reverse Dijkstra (much faster than Floyd-Warshall)
+    backward_distances = np.array(distances).T
+    _, backward_d_star = min_distance(end_index, -1, backward_distances)
+    shortest_trail = 9999
     for row, line in enumerate(lines):
         for col, letter in enumerate(line):
-            if letter=='a' and distances[row*num_cols+col][end_index] < shortest_trail:
-                shortest_trail = distances[row*num_cols+col][end_index]
+            if letter == 'a':
+                if backward_d_star[row*num_cols + col] < shortest_trail:
+                    shortest_trail = backward_d_star[row*num_cols + col]
 
     print('Part 2:')
     print(f'p2={shortest_trail}')
