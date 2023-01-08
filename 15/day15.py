@@ -2,7 +2,7 @@
 
 # Advent of Code 2022, Day 15
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 
@@ -20,6 +20,7 @@ class Position():
 class Sensor():
     location: Any
     closest_beacon: Any
+    distance_to_closest_beacon: int = field(default=-1, repr=False)
 
     def parse(text):
         tokens = text.split()
@@ -34,7 +35,10 @@ class Sensor():
                 sensor in sensors])
 
     def closest_beacon_distance(self):
-        return self.location.distance_to(self.closest_beacon)
+        if self.distance_to_closest_beacon == -1:
+            self.distance_to_closest_beacon = \
+                    self.location.distance_to(self.closest_beacon)
+        return self.distance_to_closest_beacon
 
 
 def beacon_x_values(sensors):
