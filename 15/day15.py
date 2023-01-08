@@ -40,6 +40,15 @@ class Sensor():
                     self.location.distance_to(self.closest_beacon)
         return self.distance_to_closest_beacon
 
+    def interval(self, y):
+        interval_width = self.closest_beacon_distance() \
+                    - abs(self.location.y - y)
+        if interval_width >= 0:
+            return (self.location.x - interval_width, 
+                    self.location.x + interval_width)
+        else:
+            return None
+
 
 def beacon_x_values(sensors):
     output = set()
