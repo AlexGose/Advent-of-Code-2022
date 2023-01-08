@@ -143,5 +143,10 @@ if __name__ == '__main__':
 
     print(f'Part 1: {num_without_beacon}')
 
-    p2 = 0
-    print(f'Part 2: {p2}')
+    for y in range(y_max+1):
+        intervals = [sensor.interval(y) for sensor in sensors]
+        count, uncovered_x = covered_x(intervals, 0, y_max)
+        if count < y_max+1:
+            print(f'uncovered point found at y={y}')
+            print(f'Part 2: tuning frequency = {uncovered_x*4000000 + y}')
+            break
