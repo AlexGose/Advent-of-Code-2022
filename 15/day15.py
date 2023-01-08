@@ -98,6 +98,25 @@ def no_beacon_intervals(sensors, y):
     return intervals
 
 
+def covered_x(intervals, min_x, max_x):
+    count = 0
+    x = min_x
+    uncovered_x = -1
+    while x <= max_x:
+        for i, interval in enumerate(intervals):
+            if interval and interval[0] <= x <= interval[1]:
+                count += min(interval[1], max_x) - x + 1
+                x = min(interval[1], max_x)
+                #print(f'count = {count}, x= {x}')
+                break
+            if i == len(intervals) - 1:
+                print(f'uncovered point found at x={x}')
+                uncovered_x = x
+        x += 1
+        #print(f'count = {count}, x= {x}')
+    return count, uncovered_x
+
+
 if __name__ == '__main__':
     lines = open(0).read().rstrip('\n').split('\n')
     if len(lines) == 14:
