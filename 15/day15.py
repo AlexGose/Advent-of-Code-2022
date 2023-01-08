@@ -6,39 +6,6 @@ from dataclasses import dataclass
 from typing import Any
 
 
-@dataclass
-class Grid():
-    min_x: int
-    max_x: int
-    min_y: int
-    max_y: int
-
-    def from_sensors(sensors):
-        min_x=99999999999999
-        max_x=-99999999999999
-        max_y=-99999999999999
-        min_y=99999999999999
-
-        for sensor in sensors:
-            if sensor.location.x < min_x:
-                min_x = sensor.location.x
-            if sensor.closest_beacon.x < min_x:
-                min_x = sensor.closest_beacon.x
-            if sensor.location.x > max_x:
-                max_x = sensor.location.x
-            if sensor.closest_beacon.x > max_x:
-                max_x = sensor.closest_beacon.x
-            if sensor.location.y > max_y:
-                max_y = sensor.location.y
-            if sensor.closest_beacon.y > max_y:
-                max_y = sensor.closest_beacon.y
-            if sensor.location.y < min_y:
-                min_y = sensor.location.y
-            if sensor.closest_beacon.y < min_y:
-                min_y = sensor.closest_beacon.y
-
-        return Grid(min_x, max_x, min_y, max_y)
-
 
 @dataclass(frozen=True)
 class Position():
@@ -128,7 +95,6 @@ if __name__ == '__main__':
         y_max = 4000000
 
     sensors = [Sensor.parse(line) for line in lines]
-    grid = Grid.from_sensors(sensors)
 
     beacon_x = beacon_x_values(sensors)
     #print(beacon_x)
