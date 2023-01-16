@@ -16,6 +16,13 @@ def message_start_index(line):
                 return index + 1
 
 
+def message_start_index_set(line):
+    for index in range(14, len(line)):
+        if len(set(c for c in line[index-14:index])) == 14:
+            return index
+
+
+
 def message_start_index_faster(line):
     index = 1
     prev_repeat = -1
@@ -44,8 +51,14 @@ if __name__ == '__main__':
 
         p2 = message_start_index(line)
         p22 = message_start_index_faster(line)
+        p2set = message_start_index_set(line)
         print('  runtime for message_start_index:')
-        print(timeit.repeat('message_start_index(line)', number=100, globals=globals()))
+        print(timeit.repeat('message_start_index(line)', number=100,
+            globals=globals()))
+        print('  runtime for message_start_index_set:')
+        print(timeit.repeat('message_start_index_set(line)', number=100,
+            globals=globals()))
         print('  runtime for message_start_index_faster:')
-        print(timeit.repeat('message_start_index_faster(line)', number=100, globals=globals()))
-        print("start of message at:", p2, "and", p22)
+        print(timeit.repeat('message_start_index_faster(line)', number=100,
+            globals=globals()))
+        print("start of message at:", p2, "and", p22, "and", p2set)
